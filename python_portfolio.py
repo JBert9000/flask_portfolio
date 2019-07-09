@@ -12,7 +12,7 @@ def plot():
     from bokeh.embed import components
     from bokeh.resources import CDN
 
-    six_months = date.today() + relativedelta(months=-12)
+    six_months = date.today() + relativedelta(months=-6)
 
     start=six_months
     end=datetime.datetime.now()
