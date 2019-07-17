@@ -1,12 +1,22 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import sys
 import logging
+from flask_sqlalchemy import SQLAlchemy
+from send_email import send_email
+from sqlalchemy.sql import func
 
 app=Flask(__name__)
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 
+@app.route('/')
+def home():
+    return render_template("home.html")
+
+@app.route('/about/')
+def about():
+    return render_template("about.html")
 
 @app.route('/plot/')
 def plot():
@@ -72,18 +82,6 @@ def plot():
 
     df2=data.DataReader(name=stock_names[1],data_source="yahoo",start=start,end=end)
 
-
-
-    def increase_decrease(c,o):
-        if c > o:
-            value="Increase"
-        elif c < o:
-            value="Decrease"
-        else:
-            value="Equal"
-
-        return value
-
     df2["Status"]=[increase_decrease(c,o) for c,o in zip(df2.Close,df2.Open)]
 
     df2["Middle"]=(df2.Open+df2.Close)/2
@@ -93,10 +91,8 @@ def plot():
     p2.title.text=stock_names[1]
     p2.grid.grid_line_alpha=0.4
 
-    #.segment method takes 4 manditory arguments;high of both x & y, and low of both x & y
     p2.segment(df2.index,df2.High,df2.index,df2.Low,color="black")
 
-    #.rect is the rectangle method. Arguments are: rect(x axis, y axis, width, height)
     p2.rect(df2.index[df2.Status=="Increase"],df2.Middle[df2.Status=="Increase"],
            hours_12,df2.Height[df2.Status=="Increase"],fill_color="#00FA9A",line_color="black")
 
@@ -108,17 +104,50 @@ def plot():
     cdn_js=CDN.js_files[0]
     cdn_css=CDN.css_files[0]
 
-    # in this case, the render_template function takes 5 arguments; the page to be rendered, and the 4 variables that call the bokeh plot.
     return render_template("plot.html",script1=script1,div1=div1,script2=script2,div2=div2,cdn_js=cdn_js,cdn_css=cdn_css)
 
 
-@app.route('/')
-def home():
-    return render_template("home.html")
 
-@app.route('/about/')
-def about():
-    return render_template("about.html")
+app.config['SQLALCHEMY_DATABASE_URI']='postgresql://zeta_g:postgres123@localhost/height_data_collector'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db=SQLAlchemy(app)
+
+class Data(db.Model):
+    __tablename__="data"
+    id=db.Column(db.Integer,primary_key=True)
+    email_=db.Column(db.String(120),unique=True)
+    height_=db.Column(db.Integer)
+
+    def __init__(self,email_,height_):
+        self.email_=email_
+        self.height_=height_
+
+@app.route("/height_collector/")
+def height_collector():
+    return render_template("height_collector.html")
+
+@app.route("/success", methods=['POST'])
+def success():
+    if request.method=='POST':
+        email=request.form["email_name"]
+        height=request.form["height_name"]
+
+        data=Data(email,height)
+        if db.session.query(Data).filter(Data.email_==email).count==0:
+            db.session.add(data)
+            db.session.commit()
+            average_height=db.session.query(func.avg(Data.height_)).scalar()
+            average_height=round(average_height,1)
+            count=db.session.query(Data.height_).count()
+            send_email(email,height,average_height,count)
+            # try:
+            #     db.session.commit()
+            # except IntegrityError:
+            #     db.session.rollback()
+            return render_template("success.html")
+    return render_template('height_collector.html',text="Looks like this email was already used.")
 
 if __name__=="__main__":
     app.run(debug=True)

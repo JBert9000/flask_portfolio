@@ -1,0 +1,29 @@
+{%extends "layout.html"%}
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="../static/main.css">
+    <meta charset="utf-8">
+    <title>Data Collector</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Collecting Heights</h1>
+      <h3>Please input your height:</h3>
+      <div class="message">
+        {{text | safe}}
+      </div>
+      <form class="" action="{{url_for('success')}}" method="post">
+        <input title="Your email will be safe with us" placeholder="Enter your email here" type="email" name="email_name" required>
+        <br>
+        <input title="Your data will be safe with us" placeholder="Enter your height in cm here" type="number" min="50" max="250" name="height_name">
+        <br>
+        <button type="submit" name="button"> Submit </button>
+      </form>
+    </div>
+  </body>
+</html>
+
+{%endblock%}
