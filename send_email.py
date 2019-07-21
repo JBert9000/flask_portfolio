@@ -25,5 +25,6 @@ def send_email(email,height,average_height,count):
     yandex.ehlo()
     yandex.starttls()
     yandex.ehlo()
+    yandex.starttls()
     yandex.login(from_email,from_password)
     yandex.send_message(msg)
