@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 import sys
 import logging
 from flask_sqlalchemy import SQLAlchemy
 from send_email import send_email
 from sqlalchemy.sql import func
+
 
 app=Flask(__name__)
 
@@ -151,6 +152,17 @@ def success():
             #     db.session.rollback()
             return render_template("success.html")
     return render_template('height_collector.html',text="Looks like this email was already used.")
+
+
+@app.route("/downloads")
+def downloads():
+    return send_file(file.filename,attachment_filename=file.filename,
+    as_attachment=True)
+
+@app.route("/geocoder", methods=["POST", "GET"])
+def geocoder():
+    
+    return render_template("geocoder.html")
 
 if __name__=="__main__":
     app.run(debug=True)

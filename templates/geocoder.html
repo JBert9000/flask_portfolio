@@ -1,0 +1,21 @@
+{%extends "layout.html"%}
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="../static/css/height.css">
+    <meta charset="utf-8">
+    <title>CSV Geocoder</title>
+  </head>
+  <body>
+    <div class="home">
+      <h1>CSV Geocoder</h1>
+      <p>Please upload your .csv file and this will add longitude and latitude columns to it.</p>
+      <a href="{{url_for('geocoder')}}" target="blank"><button>Upload CSV</button></a>
+      {% include btn ignore missing %}
+    </div>
+  </body>
+</html>
+
+{%endblock%}

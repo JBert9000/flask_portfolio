@@ -1,0 +1,19 @@
+{%extends "layout.html"%}
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="downloads">
+      <a href="{{url_for('downloads')}} target="blank""> <button class="button">Download</button></a>
+    </div>
+    {% include btn ignore missing %}
+  </body>
+</html>
+
+{%endblock%}
