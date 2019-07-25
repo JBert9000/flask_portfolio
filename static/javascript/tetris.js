@@ -220,12 +220,12 @@ function updateScore() {
 const colors = [
   null,
   '#F2365C',
-  '#369EDB',
-  '#EC8824',
-  '#2FE2D6',
-  '#E2D02F',
+  '#0FF6FE',
+  '#47FE0F',
+  '#3B26F3',
+  '#F4DF20',
   '#2FE277',
-  '#fff'
+  '#FEAD09'
 ];
 
 document.addEventListener('keydown', event => {

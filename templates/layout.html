@@ -3,13 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>Jan Berlik</title>
-    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/layout.css">
   </head>
   <body>
     <header>
       <div>
         <h1 class="logo">Jan Bertlik, <br> <span>Web Developer</span></h1>
-          <strong><nav>
+        <!-- <h1 class="logo-stretch">{      }</h1> -->
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+          <nav>
               <ul class="menu">
                 <li><a href="{{ url_for('home') }}">Home</a></li>
                 <li><a href="{{ url_for('about') }}">About</a></li>
@@ -18,7 +20,12 @@
                 <!-- <li><a href="{{ url_for('downloads') }}">Downloads</a></li> -->
                 <!-- <li><a href="{{ url_for('geocoder') }}">Geocoder</a></li> -->
               </ul>
-            </nav></strong>
+            </nav>
+            <label for="nav-toggle" class="nav-toggle-label">
+              <span>
+
+              </span>
+            </label>
         </div>
       </header>
       <div class="grid-container">
