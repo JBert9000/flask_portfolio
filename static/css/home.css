@@ -1,0 +1,55 @@
+/* colors:
+'#F2365C', hot pink
+'#0FF6FE', ocean blue
+'#47FE0F', green
+'#3B26F3', purple
+'#F4DF20',light yellow
+'#2FE277', forest green
+'#FEAD09' thick yellow */
+
+:root {
+  --forest_green: #2FE277;
+  --hot_pink: #F2365C;
+  --purple: #3B26F3;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  display: grid | inline-grid;
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #369EDB;
+}
+
+.grid-img {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+img {
+  width: 100%;
+}
+
+figcaption {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  bottom: 1em;
+  left: 1em;
+  background: rgba(#EC8824, .8);
+  color: #F2365C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity ease-in-out 300ms;
+  font-size: 50px;
+
+}
+
+figcaption:hover {
+  opacity: 1;
+}

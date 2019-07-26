@@ -6,6 +6,7 @@ from send_email import send_email
 from sqlalchemy.sql import func
 
 
+
 app=Flask(__name__)
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -161,7 +162,7 @@ def downloads():
 
 @app.route("/geocoder", methods=["POST", "GET"])
 def geocoder():
-    
+
     return render_template("geocoder.html")
 
 if __name__=="__main__":

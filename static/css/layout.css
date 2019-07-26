@@ -11,6 +11,8 @@
   --forest_green: #2FE277;
   --hot_pink: #F2365C;
   --purple: #3B26F3;
+  --hot_pink2: #FE096B;
+  --yellow: #fdcd3b;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -29,7 +31,8 @@ ul.menu {
 
 
 header {
-  background: var(--forest_green);
+  /* background: var(--forest_green); #ffed4b */
+  background: linear-gradient(130deg, var(--yellow) 40%, var(--hot_pink2) 70%);
   /* opacity: 0.8; */
   text-align: center;
   position: fixed;
@@ -41,19 +44,42 @@ header {
 
 .logo {
   margin: 0;
-  font-size: 1.7em;
+  font-size: 1.3em;
+  text-decoration: none;
   color: #fff;
   text-transform: uppercase;
+
+  /* font-weight: 900; */
+  line-height: 1.1;
+  padding-left: 10px;
+  padding-top: 5px;
+
   float: left;
   font-weight: bold;
   margin-bottom: 10px;
   transition: opacity ease-in-out 300ms;
-  text-shadow:
+  /* text-shadow:
        3px 3px 0 #000,
      -1px -1px 0 #000,
       1px -1px 0 #000,
       -1px 1px 0 #000,
-       1px 1px 0 #000;
+       1px 1px 0 #000; */
+}
+
+/* h1 a {
+  transform: scale(1,0);
+  transform-origin: top;
+  transition: transform 400ms ease-in-out;
+} */
+
+.logo:hover {
+  color: var(--hot_pink2);
+  /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
+}
+
+.logo:checked ~ a {
+  opacity: 1;
+  transition: opacity 250ms ease-in-out 250ms;
 }
 
 .nav-toggle {
@@ -75,7 +101,7 @@ header {
 .nav-toggle-label span::before,
 .nav-toggle-label span::after {
   display: block;
-  background: var(--hot_pink);
+  background: var(--yellow);
   height: 2px;
   width: 2em;
   border-radius: 2px;
@@ -101,7 +127,7 @@ nav {
   text-align: right;
   top: 100%;
   left: 0;
-  background: var(--forest_green);
+  background: linear-gradient(50deg, var(--yellow) 45%, var(--hot_pink2) 75%);
   width: 100%;
   transform: scale(1,0);
   transform-origin: top;
@@ -129,7 +155,8 @@ nav a {
 }
 
 nav a:hover {
-  color: var(--hot_pink);
+  color: var(--yellow);
+  /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
 }
 
 .nav-toggle:checked ~ nav {
@@ -176,8 +203,8 @@ nav a:hover {
         1px -1px 0 #000,
         -1px 1px 0 #000,
          1px 1px 0 #000; */
-    border: 2px;
-    border-color: var(--purple)
+    /* border: 2px;
+    border-color: var(--purple) */
   }
 
   nav ul {
@@ -204,7 +231,7 @@ nav a:hover {
     content: '';
     display: block;
     height: 5px;
-    background: var(--hot_pink);
+    background: var(--yellow);
     position: absolute;
     bottom: -.5em;
     /* top: -.5em; */
@@ -217,5 +244,30 @@ nav a:hover {
 
   nav a:hover::before {
     transform: scale(1,1);
+
   }
+
+  .logo a::before {
+    content: '';
+    display: block;
+    width: 235px;
+    height: 5px;
+    background: var(--hot_pink2);
+    position: absolute;
+    bottom: 1.5px;
+
+    margin-left: 20px;
+    /* top: -.5em; */
+    left: 0;
+    right: 0;
+    transform: scale(0,1);
+    transform-origin: left;
+    transition: transform ease-in-out 250ms;
+  }
+
+  .logo a:hover::before {
+    transform: scale(1,1);
+
+  }
+
 }
