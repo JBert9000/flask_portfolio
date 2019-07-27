@@ -20,9 +20,40 @@ def home():
 def about():
     return render_template("about.html")
 
-@app.route('/tetris-score', methods=["POST"])
+db=SQLAlchemy(app)
+
+class Data(db.Model):
+    __tablename__="data"
+    id=db.Column(db.Integer,primary_key=True)
+    email_=db.Column(db.String(120),unique=True)
+    # score_=db.Column(db.Integer)
+
+    def __init__(self,email_):
+        self.email_=email_
+        # self.score_=score_
+
+@app.route('/tetris-score', methods=["GET","POST"])
 def tetrisScore():
-    return render_template("tetris-score.html")
+    if request.method=='POST':
+        email=request.form["email_name"]
+        # score=request.form["score"]
+
+
+
+        if db.session.query(Data).filter(Data.email_==email).count()==0:
+            data=Data(email) # 'score' is an argument
+            db.session.add(data)
+            db.session.commit()
+            # average_height=db.session.query(func.avg(Data.height_)).scalar()
+            # average_height=round(average_height,1)
+            # count=db.session.query(Data.height_).count()
+            send_email(email) # 'score' is an argument
+            # try:
+            #     db.session.commit()
+            # except IntegrityError:
+            #     db.session.rollback()
+            return render_template("tetris-score.html")
+    return render_template('tetris-score.html',text="Your score has been updated.")
 
 @app.route('/plot/')
 def plot():
@@ -120,17 +151,17 @@ app.config['SQLALCHEMY_DATABASE_URI']='postgres://wwahvywfqyxtzh:f467af8693cb8a6
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db=SQLAlchemy(app)
-
-class Data(db.Model):
-    __tablename__="data"
-    id=db.Column(db.Integer,primary_key=True)
-    email_=db.Column(db.String(120),unique=True)
-    height_=db.Column(db.Integer)
-
-    def __init__(self,email_,height_):
-        self.email_=email_
-        self.height_=height_
+# db=SQLAlchemy(app)
+#
+# class Data(db.Model):
+#     __tablename__="data"
+#     id=db.Column(db.Integer,primary_key=True)
+#     email_=db.Column(db.String(120),unique=True)
+#     height_=db.Column(db.Integer)
+#
+#     def __init__(self,email_,height_):
+#         self.email_=email_
+#         self.height_=height_
 
 @app.route("/height_collector/")
 def height_collector():

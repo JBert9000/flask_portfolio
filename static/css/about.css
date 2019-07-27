@@ -52,6 +52,6 @@ body {
   float: left;
 }
 
-.score {
+#score {
   position: relative;
 }

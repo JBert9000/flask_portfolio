@@ -7,16 +7,17 @@
 
     <div class="game">
 
-        <h4 class="score">Score: </h4>
-        <div class="score">
-          <form class="" action="{{url_for('tetrisScore')}}" method="post">
-            <input title="Email your score to yourself!" placeholder="Enter your email here" type="email" name="email_name" required>
-            <button type="submit" name="button"> Submit </button>
-          </form>
+        <h4 class="Tscore">Score: </h4>
+        <div id="score">
+
         </div>
           <canvas id="tetris" width="240" height="400"></canvas>
           <script src="/static/javascript/tetris.js"></script>
         </div>
+        <form class="" action="{{url_for('tetrisScore')}}" method="post">
+          <input title="Email your score to yourself!" placeholder="Enter your email here" type="email" name="email_name" required>
+          <button type="submit" name="button"> Submit </button>
+        </form>
       </div>
     </div>
     <div class="about">
