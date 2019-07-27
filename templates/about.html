@@ -1,18 +1,27 @@
 {%extends "layout.html"%}
 {%block content%}
+<link rel="stylesheet" href="/static/css/about.css">
 
 <div class="home">
     <h1>My About Page</h1>
 
     <div class="game">
 
-        <h4>Score: </h4><div id="score"></div>
+        <h4 class="score">Score: </h4>
+        <div class="score">
+          <form class="" action="{{url_for('tetrisScore')}}" method="post">
+            <input title="Email your score to yourself!" placeholder="Enter your email here" type="email" name="email_name" required>
+            <button type="submit" name="button"> Submit </button>
+          </form>
+        </div>
           <canvas id="tetris" width="240" height="400"></canvas>
           <script src="/static/javascript/tetris.js"></script>
+        </div>
+      </div>
     </div>
     <div class="about">
-      <img src="logo3.jpg" alt="">
-      <p class="">There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...</p>
+      <!-- <img src="logo3.jpg" alt=""> -->
+      <p class="about">There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...There will be a description here...</p>
 
     </div>
 

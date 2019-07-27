@@ -20,6 +20,10 @@ def home():
 def about():
     return render_template("about.html")
 
+@app.route('/tetris-score', methods=["POST"])
+def tetrisScore():
+    return render_template("tetris-score.html")
+
 @app.route('/plot/')
 def plot():
     from pandas_datareader import data

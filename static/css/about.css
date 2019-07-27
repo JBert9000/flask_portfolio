@@ -13,45 +13,45 @@
   --purple: #3B26F3;
   --hot_pink2: #FE096B;
   --yellow: #fdcd3b;
+  --old-blue: #369EDB;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 
+div.home {
+  padding-top: 70px;
+}
+
 body {
-  display: grid | inline-grid;
+  display: table;
   margin: 0;
   padding: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background: linear-gradient(70deg, #fdcd3b 60%, #ffed4b 60%);
 }
 
-.grid-img {
-  margin: 0;
-  padding: 0;
-  position: relative;
+.game {
+  display: inline-block;
 }
 
-img {
-  width: 100%;
-}
-
-figcaption {
+# tetris {
   position: absolute;
-  top: 1em;
-  right: 1em;
-  bottom: 1em;
-  left: 1em;
-  background: rgba(#EC8824, .8);
-  color: #F2365C;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity ease-in-out 300ms;
-  font-size: 50px;
-
+  float: left;
 }
 
-figcaption:hover {
-  opacity: 1;
+.about {
+  display: table-cell;
+  margin: 0 auto;
+  display: grid | inline-grid;
+  display: grid;
+  grid-column: 1;
+  grid-row: 2 / 4;
+}
+
+.about p {
+  float: left;
+}
+
+.score {
+  position: relative;
 }
