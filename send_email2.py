@@ -3,16 +3,16 @@ import smtplib
 # from imaplib import IMAP4
 
 
-def send_email(email):
+def send_email(email,score):
     from_email="testemail.python@yandex.com"
     from_password="testPython"
     to_email=email
-    # score=score
+    score=score
     # count=count
 
     subject="Tetris Scores via Jan Bertlik Website"
 
-    message="Hey there, your score is <strong>%s</strong>. s people played Tetris on my site." % (email)
+    message="Hey there, your score is <strong>%s</strong>. <strong>%s</strong> people played Tetris on my site." % (email,score)
 
     msg=MIMEText(message,'html')
     msg['Subject']=subject

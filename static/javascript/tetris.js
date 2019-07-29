@@ -19,6 +19,7 @@ function arenaSweep() {
     player.score += rowCount * 10;
     rowCount *= 2;
   }
+	sendScore();
 }
 
 function collide(arena, player) {
@@ -149,7 +150,7 @@ function playerMove(dir) {
 }
 
 function playerReset() {
-  const pieces = 'ILJOTSZ';
+  const pieces = 'I'; // 'ILOTSZ'
   player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
   player.pos.y = 0
   player.pos.x = (arena[0].length / 2 | 0) -
@@ -215,6 +216,19 @@ function update(time = 0) {
 
 function updateScore() {
   document.getElementById('score').innerText = player.score;
+}
+
+// function sendScore() {
+// 	document.getElementById('score_input').value = updateScore()
+// 	return document.getElementById('score_input').value;
+// }
+
+function sendScore(playerScore) {
+	playerScore = updateScore()
+	document.getElementById('score_input').value = playerScore;
+	if (playerScore < 0 && playerScore === "undefined") {
+		return playerScore;
+	};
 }
 
 const colors = [

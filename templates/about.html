@@ -16,6 +16,7 @@
         </div>
         <form class="" action="{{url_for('tetrisScore')}}" method="post">
           <input title="Email your score to yourself!" placeholder="Enter your email here" type="email" name="email_name" required>
+          <input id="score_input" value="" type="hidden" name="tetris_score" required>
           <button type="submit" name="button"> Submit </button>
         </form>
       </div>

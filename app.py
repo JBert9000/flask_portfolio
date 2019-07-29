@@ -20,40 +20,41 @@ def home():
 def about():
     return render_template("about.html")
 
+
+app.config['SQLALCHEMY_DATABASE_URI']='postgresql://zeta_g:postgres123@localhost/tetris_scores'
+
+# app.config['SQLALCHEMY_DATABASE_URI']='postgres://wwahvywfqyxtzh:f467af8693cb8a633a9307bf43adb8e25ae04b04593dd010770c59e1ec926c08@ec2-107-21-216-112.compute-1.amazonaws.com:5432/ddvtoqgimmm9b9?sslmode=require'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
 db=SQLAlchemy(app)
 
 class Data(db.Model):
     __tablename__="data"
     id=db.Column(db.Integer,primary_key=True)
     email_=db.Column(db.String(120),unique=True)
-    # score_=db.Column(db.Integer)
+    score_=db.Column(db.Integer)
 
-    def __init__(self,email_):
+    def __init__(self,email_,score_):
         self.email_=email_
-        # self.score_=score_
+        self.score_=score_
 
 @app.route('/tetris-score', methods=["GET","POST"])
 def tetrisScore():
     if request.method=='POST':
         email=request.form["email_name"]
-        # score=request.form["score"]
+        score=request.request.args.getvalue["tetris_score"]
+        print("**************************************" + score)
 
+        data=Data(email,score)
+        db.session.add(data)
+        db.session.commit()
 
+        send_email(email,score)
 
-        if db.session.query(Data).filter(Data.email_==email).count()==0:
-            data=Data(email) # 'score' is an argument
-            db.session.add(data)
-            db.session.commit()
-            # average_height=db.session.query(func.avg(Data.height_)).scalar()
-            # average_height=round(average_height,1)
-            # count=db.session.query(Data.height_).count()
-            send_email(email) # 'score' is an argument
-            # try:
-            #     db.session.commit()
-            # except IntegrityError:
-            #     db.session.rollback()
-            return render_template("tetris-score.html")
-    return render_template('tetris-score.html',text="Your score has been updated.")
+        return render_template("tetris-score.html")
+    # return render_template('tetris-score.html',text="Your score has been updated.")
 
 @app.route('/plot/')
 def plot():
@@ -145,11 +146,7 @@ def plot():
 
 
 
-# app.config['SQLALCHEMY_DATABASE_URI']='postgresql://zeta_g:postgres123@localhost/height_data_collector'
 
-app.config['SQLALCHEMY_DATABASE_URI']='postgres://wwahvywfqyxtzh:f467af8693cb8a633a9307bf43adb8e25ae04b04593dd010770c59e1ec926c08@ec2-107-21-216-112.compute-1.amazonaws.com:5432/ddvtoqgimmm9b9?sslmode=require'
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # db=SQLAlchemy(app)
 #
