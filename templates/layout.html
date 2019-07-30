@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Jan Berlik</title>
     <link rel="stylesheet" href="/static/css/layout.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
   </head>
   <body>
     <header>
@@ -14,12 +15,11 @@
         <input type="checkbox" id="nav-toggle" class="nav-toggle">
           <nav>
               <ul class="menu">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
                 <li><a href="{{ url_for('about') }}">About</a></li>
                 <li><a href="{{ url_for('plot') }}">Stock Charts</a></li>
-                <li><a href="{{ url_for('height_collector') }}">Height Collector</a></li>
-                <!-- <li><a href="{{ url_for('downloads') }}">Downloads</a></li> -->
-                <!-- <li><a href="{{ url_for('geocoder') }}">Geocoder</a></li> -->
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('downloads') }}">Downloads</a></li>
+
               </ul>
             </nav>
             <label for="nav-toggle" class="nav-toggle-label">
@@ -29,9 +29,29 @@
             </label>
         </div>
       </header>
-      <div class="grid-container">
+      <div id="grid-container">
+        <!-- <div id="main"> -->
         {%block content%}
         {%endblock%}
+        <!-- </div> -->
       </div>
+
+      <footer id="main_footer">
+      <p class="copyright">&copy; 2019 Jan Bertlik</p>
+
+      <div class="links">
+        <a href="https://github.com/JBert9000"><i class="fab fa-github"></i></a>
+        <a href="https://soundcloud.com/chiibu"><i class="fab fa-soundcloud"></i></a>
+        <!-- <a href="#"><i class="fab fa-youtube"></i></a> -->
+        <a href="https://www.linkedin.com/in/john-bertlik-59b4b95b/"><i class="fab fa-linkedin"></i></a>
+
+        <!-- <a href="<%= new_admin_session_path %>">
+          <i class="fas fa-key"></i>
+        </a> -->
+
+
+      </div>
+    </footer>
+
   </body>
 </html>

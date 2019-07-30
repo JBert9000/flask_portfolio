@@ -17,6 +17,10 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+html, body {
+  height: 100%;
+}
+
 body {
   display: grid | inline-grid;
   margin: 0;
@@ -24,7 +28,18 @@ body {
   width: 100%;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color: #369EDB;
+
+  /* object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh; */
 }
+
+
 
 ul.menu {
   margin: 0px;
@@ -32,7 +47,6 @@ ul.menu {
 
 
 header {
-  /* background: var(--forest_green); #ffed4b */
   background: linear-gradient(130deg, var(--yellow) 40%, var(--hot_pink2) 70%);
   /* opacity: 0.8; */
   text-align: center;
@@ -50,7 +64,6 @@ header {
   color: #fff;
   text-transform: uppercase;
 
-  /* font-weight: 900; */
   line-height: 1.1;
   padding-left: 10px;
   padding-top: 5px;
@@ -138,6 +151,10 @@ nav {
 nav ul {
   margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+ul {
   list-style: none;
 }
 
@@ -271,4 +288,54 @@ nav a:hover {
 
   }
 
+}
+
+#grid-container {
+  object-fit: cover;
+  min-height: 100%;
+}
+
+#main {
+  overflow: auto;
+  padding-bottom: 20px;
+
+}
+
+#main_footer {
+  text-align: center;
+  position: relative;
+  z-index: 999;
+  width: 100%;
+  margin-top: -20px;
+  /* margin: 0px; */
+  padding: 20px;
+  /* height: 40px; */
+  background: linear-gradient(130deg, var(--yellow) 40%, var(--hot_pink2) 70%);
+  clear: both;
+  bottom:0;
+  }
+
+.copyright {
+  float: left;
+  font-size: .9em;
+  margin: 0;
+  }
+
+.links {
+  float: right;
+  }
+
+.links li {
+  color: var(--purple)
+  margin-left: 1em;
+  padding-top: .2em;
+  font-size: 20px;
+}
+
+.links li:hover  {
+  color: var(--hot_pink);
+}
+
+.sign_in {
+  color: var(--hot_pink2);
 }

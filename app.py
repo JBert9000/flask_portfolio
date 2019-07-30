@@ -189,13 +189,18 @@ def success():
 
 @app.route("/downloads")
 def downloads():
-    return send_file(file.filename,attachment_filename=file.filename,
-    as_attachment=True)
+        # return send_file(file.filename,attachment_filename=file.filename,
+        # as_attachment=True)
+    return render_template("downloads.html")
 
-@app.route("/geocoder", methods=["POST", "GET"])
-def geocoder():
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
 
-    return render_template("geocoder.html")
+# @app.route("/geocoder", methods=["POST", "GET"])
+# def geocoder():
+#
+#     return render_template("geocoder.html")
 
 if __name__=="__main__":
     app.run(debug=True)
