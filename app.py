@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, send_file
 import sys
 import logging
 from flask_sqlalchemy import SQLAlchemy
-from send_email import send_email
+from send_email2 import send_email
 from sqlalchemy.sql import func
 
 
@@ -36,6 +36,7 @@ class Data(db.Model):
     email_=db.Column(db.String(120),unique=True)
     score_=db.Column(db.Integer)
 
+
     def __init__(self,email_,score_):
         self.email_=email_
         self.score_=score_
@@ -44,8 +45,10 @@ class Data(db.Model):
 def tetrisScore():
     if request.method=='POST':
         email=request.form["email_name"]
-        score=request.request.args.getvalue["tetris_score"]
-        print("**************************************" + score)
+        # score=request.form["tetris_score"]
+        score=request.get_json()
+
+        print("********************************" + str(score))
 
         data=Data(email,score)
         db.session.add(data)
@@ -160,31 +163,31 @@ def plot():
 #         self.email_=email_
 #         self.height_=height_
 
-@app.route("/height_collector/")
-def height_collector():
-    return render_template("height_collector.html")
+# @app.route("/height_collector/")
+# def height_collector():
+#     return render_template("height_collector.html")
 
-@app.route("/success", methods=['POST'])
-def success():
-    if request.method=='POST':
-        email=request.form["email_name"]
-        height=request.form["height_name"]
-
-
-        if db.session.query(Data).filter(Data.email_==email).count()==0:
-            data=Data(email,height)
-            db.session.add(data)
-            db.session.commit()
-            average_height=db.session.query(func.avg(Data.height_)).scalar()
-            average_height=round(average_height,1)
-            count=db.session.query(Data.height_).count()
-            send_email(email,height,average_height,count)
-            # try:
-            #     db.session.commit()
-            # except IntegrityError:
-            #     db.session.rollback()
-            return render_template("success.html")
-    return render_template('height_collector.html',text="Looks like this email was already used.")
+# @app.route("/success", methods=['POST'])
+# def success():
+#     if request.method=='POST':
+#         email=request.form["email_name"]
+#         height=request.form["height_name"]
+#
+#
+#         if db.session.query(Data).filter(Data.email_==email).count()==0:
+#             data=Data(email,height)
+#             db.session.add(data)
+#             db.session.commit()
+#             average_height=db.session.query(func.avg(Data.height_)).scalar()
+#             average_height=round(average_height,1)
+#             count=db.session.query(Data.height_).count()
+#             send_email(email,height,average_height,count)
+#             # try:
+#             #     db.session.commit()
+#             # except IntegrityError:
+#             #     db.session.rollback()
+#             return render_template("success.html")
+#     return render_template('height_collector.html',text="Looks like this email was already used.")
 
 
 @app.route("/downloads")

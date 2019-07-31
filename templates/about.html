@@ -1,6 +1,8 @@
 {%extends "layout.html"%}
 {%block content%}
 <link rel="stylesheet" href="/static/css/about.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
 
 <h1>My About Page</h1>
 
@@ -11,14 +13,29 @@
           <h4 class="Tscore">Score: <div id="score"></div>
           </h4>
 
+              <script>
+                  function send_score(score) {
+                        var scoreObj={"score_":score};
+                        $.ajax({
+                                  console.log("send_score called")
+                                  url:"/tetris-score",
+                                  type: "POST",
+                                  contentType:"applicaton/json",
+                                  dataType:"json",
+                                  data: JSON.stringify(scoreObj)
+                        });
+                  }
+
+              </script>
+
               <canvas id="tetris" width="240" height="400"></canvas>
               <script src="/static/javascript/tetris.js"></script>
 
 
-              <form class="" action="{{url_for('tetrisScore')}}" method="post">
+              <form action="{{url_for('tetrisScore')}}" method="post">
                   <input title="Email your score to yourself!" placeholder="Enter your email here" type="email" name="email_name" required>
-                  <input id="score_input" value="" type="hidden" name="tetris_score" required>
-                    <button type="submit" name="button"> Submit </button>
+                  <input id="score_input" value="send_score('#score')" type="hidden" name="tetris_score" required>
+                    <button type="submit" name="button" onclick="send_score('#score');"> Submit </button>
               </form>
 
       </div>
