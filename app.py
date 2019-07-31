@@ -197,6 +197,10 @@ def downloads():
 def contact():
     return render_template("contact.html")
 
+@app.route("/projects")
+def projects():
+    return render_template("projects.html")
+
 # @app.route("/geocoder", methods=["POST", "GET"])
 # def geocoder():
 #

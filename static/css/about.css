@@ -93,3 +93,8 @@ form {
 #score {
   position: relative;
 }
+
+img {
+  width: 15em;
+  height: 10em;
+}
