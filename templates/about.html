@@ -17,13 +17,17 @@
                   function send_score(score) {
                         var scoreObj={"score_":score};
                         $.ajax({
-                                  console.log("send_score called")
+                                  // console.log("send_score called"),
+                                  // data: {
+                                  //   score_:$('#score').val()
+                                  // },
                                   url:"/tetris-score",
                                   type: "POST",
                                   contentType:"applicaton/json",
                                   dataType:"json",
                                   data: JSON.stringify(scoreObj)
                         });
+
                   }
 
               </script>
@@ -35,7 +39,7 @@
               <form action="{{url_for('tetrisScore')}}" method="post">
                   <input title="Email your score to yourself!" placeholder="Enter your email here" type="email" name="email_name" required>
                   <input id="score_input" value="send_score('#score')" type="hidden" name="tetris_score" required>
-                    <button type="submit" name="button" onclick="send_score('#score');"> Submit </button>
+                    <button type="submit" name="button" onclick="send_score();"> Submit </button>
               </form>
 
       </div>

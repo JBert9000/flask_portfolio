@@ -2,7 +2,14 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Jan Berlik</title>
+    <head>
+      {% if title %}
+        <title>Jan Bertlik - {{ title }}</title>
+      {% else %}
+        <title>Jan Bertlik</title>
+      {% endif %}
+    </head>
+    <!-- <title>Jan Berlik</title> -->
     <link rel="stylesheet" href="/static/css/layout.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
   </head>
@@ -16,11 +23,11 @@
           <nav>
               <ul class="menu">
                 <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('blog') }}">Blog</a></li>
                 <li><a href="{{ url_for('plot') }}">Stock Charts</a></li>
                 <li><a href="{{ url_for('projects') }}">Projects</a></li>
                 <li><a href="{{ url_for('downloads') }}">Downloads</a></li>
-
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
               </ul>
             </nav>
             <label for="nav-toggle" class="nav-toggle-label">

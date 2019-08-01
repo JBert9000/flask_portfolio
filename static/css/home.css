@@ -32,7 +32,8 @@ body {
   margin: 0 auto;
   display: grid;
   /* grid-auto-flow: column; */
-  grid-template-columns: repeat(auto-fill, 1fr);
+  /* grid-template-columns: repeat(auto-fill, 1fr); */
+  grid-template-columns: repeat(200px, 1fr);
   grid-gap: 1em;
 }
 
@@ -70,16 +71,28 @@ figcaption {
 
 figcaption:hover {
   opacity: 1;
+  font-size: 20px;
 }
 
+.page {
+   text-transform: uppercase;
+   line-height: 0.5;
+   text-align: center;
 
+ }
+
+ .page a {
+   color: var(--hot_pink);
+   /* line-height: 10px; */
+   text-decoration: none;
+   font-size: 20px;
+ }
 
 @media screen and (min-width: 52em) {
 
   .grid-container {
-    /* grid-template-columns: repeat(auto-fit, 1fr); */
-    grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
-
+    /* grid-template-columns: repeat(auto-fit, minmax(15em, 1fr)); */
+    grid-template-columns: repeat(1, minmax(15em, 1fr));
   }
 
   figcaption {

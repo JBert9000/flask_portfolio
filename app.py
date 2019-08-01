@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, send_file
+from flask import (Flask, abort, flash, Markup, redirect, render_template,
+                   request, Response, session, url_for)
 import sys
 import logging
 from flask_sqlalchemy import SQLAlchemy
@@ -6,19 +7,37 @@ from send_email2 import send_email
 from sqlalchemy.sql import func
 
 
-
 app=Flask(__name__)
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 
+posts=[
+    {
+        'author': 'Jan bertlik',
+        'title': 'Blog Post 1',
+        'content': 'First post content',
+        'date_posted': 'August 1st 2019'
+    },
+    {
+        'author': 'Agata Pabich',
+        'title': 'Blog Post 2',
+        'content': 'Second post content',
+        'date_posted': 'August 1st 2019'
+    }
+]
+
+@app.route("/blog/")
+def blog():
+    return render_template("blog.html",posts=posts, title="Blog")
+
 @app.route('/')
 def home():
-    return render_template("home.html")
+    return render_template("home.html", title="Home")
 
 @app.route('/about/')
 def about():
-    return render_template("about.html")
+    return render_template("about.html", title="About")
 
 
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://zeta_g:postgres123@localhost/tetris_scores'
@@ -145,7 +164,7 @@ def plot():
     cdn_js=CDN.js_files[0]
     cdn_css=CDN.css_files[0]
 
-    return render_template("plot.html",script1=script1,div1=div1,script2=script2,div2=div2,cdn_js=cdn_js,cdn_css=cdn_css)
+    return render_template("plot.html",script1=script1,div1=div1,script2=script2,div2=div2,cdn_js=cdn_js,cdn_css=cdn_css, title="Stocks")
 
 
 
@@ -194,20 +213,17 @@ def plot():
 def downloads():
         # return send_file(file.filename,attachment_filename=file.filename,
         # as_attachment=True)
-    return render_template("downloads.html")
+    return render_template("downloads.html", title="Downloads")
 
 @app.route("/contact")
 def contact():
-    return render_template("contact.html")
+    return render_template("contact.html", title="Contact")
 
 @app.route("/projects")
 def projects():
-    return render_template("projects.html")
+    return render_template("projects.html", title="Projects")
 
-# @app.route("/geocoder", methods=["POST", "GET"])
-# def geocoder():
-#
-#     return render_template("geocoder.html")
+
 
 if __name__=="__main__":
     app.run(debug=True)
