@@ -1,0 +1,146 @@
+/* colors:
+'#F2365C', hot pink
+'#0FF6FE', ocean blue
+'#47FE0F', green
+'#3B26F3', purple
+'#F4DF20',light yellow
+'#2FE277', forest green
+'#FEAD09' thick yellow
+$dark: #424652;
+$darkgrey: #403E3E;
+$light: #E5E0DF;
+$highlight: #FF554A;
+$border: #E9E9E9;
+$yellow: #FFB713;*/
+
+:root {
+  --forest_green: #2FE277;
+  --hot_pink: #F2365C;
+  --purple: #3B26F3;
+  --hot_pink2: #FE096B;
+  --yellow: #fdcd3b;
+
+  --dark: #424652;
+  --darkgrey: #403E3E;
+  --light: #E5E0DF;
+  --highlight: #FF554A;
+  --border: #E9E9E9;
+  --yellow2: #FFB713;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  display: grid | inline-grid;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: var(--darkgrey);
+  color: var(--yellow);
+  margin-top: 5rem;
+  padding-top: 1em;
+
+}
+
+.row {
+  max-width: 100%;
+  display: block;
+}
+
+main .continer {
+  width: 95%;
+  display: grid;
+  grid-template-areas:
+    "a a a a b b b b"
+    "a a a a b b b b"
+    "c c c c d d d d"
+    "c c c c d d d d";
+}
+
+.nav-item .nav-bar-nav .nav-link:hover {
+  color: var(--yellow2);
+}
+
+.mr-2 {
+  color: var(--border);
+}
+
+.col-md-8 {
+  max-width: 100%;
+}
+
+/* ************* */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--hot_pink);
+}
+
+.bg-steel {
+  background-color: var(--dark);
+}
+
+.site-header .navbar-nav .nav-link {
+  color: var(--hot_pink);
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: var(--yellow);
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+.content-section {
+  background: var(--dark);
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  grid-area: b;
+}
+
+.article-title {
+  color: var(--hot_pink);
+}
+
+a.article-title:hover {
+  color: var(--yellow);
+  text-decoration: none;
+}
+
+.article-content {
+  white-space: pre-line;
+}
+
+.article-img {
+  height: 65px;
+  width: 65px;
+  margin-right: 16px;
+}
+
+.article-metadata {
+  padding-bottom: 1px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #e3e3e3
+}
+
+.article-metadata a:hover {
+  color: var(--yellow);
+  text-decoration: none;
+}
+
+.article-svg {
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+}
+
+.account-img {
+  height: 125px;
+  width: 125px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+}
+
+.account-heading {
+  font-size: 2.5rem;
+}

@@ -1,0 +1,18 @@
+{%extends "layout.html"%}
+{%block content%}
+
+<link rel="stylesheet" href={{cdn_css | safe}} type="text/css" />
+<!-- <link rel="stylesheet" href="/static/css/plot.css"> -->
+<link rel="stylesheet" href="/static/css/custom.css">
+
+<script type="text/javascript" src={{cdn_js | safe}}></script>
+
+<div class="about">
+    <h1>Candlestick Charts for Stocks I am following</h1>
+    <p>Here are some stocks charts that I am following. They are from 6 months ago until today. (unless it's a weekend.)</p>
+</div>
+{{script1 | safe}}
+{{div1 | safe}}
+{{script2 | safe}}
+{{div2 | safe}}
+{%endblock%}

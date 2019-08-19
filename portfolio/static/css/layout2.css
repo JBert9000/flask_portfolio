@@ -1,0 +1,357 @@
+/* colors:
+'#F2365C', hot pink
+'#0FF6FE', ocean blue
+'#47FE0F', green
+'#3B26F3', purple
+'#F4DF20',light yellow
+'#2FE277', forest green
+'#FEAD09' thick yellow
+$dark: #424652;
+$darkgrey: #403E3E;
+$light: #E5E0DF;
+$highlight: #FF554A;
+$border: #E9E9E9;
+$yellow: #FFB713;*/
+
+:root {
+  --forest_green: #2FE277;
+  --hot_pink: #F2365C;
+  --purple: #3B26F3;
+  --hot_pink2: #FE096B;
+  --yellow: #fdcd3b;
+
+  --dark: #424652;
+  --darkgrey: #403E3E;
+  --light: #E5E0DF;
+  --highlight: #FF554A;
+  --border: #E9E9E9;
+  --yellow2: #FFB713;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: grid | inline-grid;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: #369EDB;
+
+  /* object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh; */
+}
+
+.nav-item .nav-bar-nav .nav-link:hover {
+  color: var(--yellow2);
+}
+
+ul.menu {
+  margin: 0px;
+}
+
+
+header {
+  background: linear-gradient(130deg, var(--dark) 40%, var(--yellow) 70%);
+
+  text-align: center;
+  position: fixed;
+  z-index: 999;
+  width: 100%;
+  margin: 0px;
+  top: 0;
+}
+
+.logo {
+  margin: 0;
+  font-size: 1.3em;
+  text-decoration: none;
+  color: #fff;
+  text-transform: uppercase;
+
+  line-height: 1.1;
+  padding-left: 10px;
+  padding-top: 5px;
+
+  float: right;
+  font-weight: bold;
+  margin-bottom: 10px;
+  transition: opacity ease-in-out 300ms;
+  /* text-shadow:
+       3px 3px 0 #000,
+     -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+       1px 1px 0 #000; */
+}
+
+/* h1 a {
+  transform: scale(1,0);
+  transform-origin: top;
+  transition: transform 400ms ease-in-out;
+} */
+
+.logo:hover {
+
+  color: var(--yellow);
+  /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
+}
+
+.logo:checked ~ a {
+  float: right;
+  opacity: 1;
+  transition: opacity 250ms ease-in-out 250ms;
+}
+
+.nav-toggle {
+  display: none;
+}
+
+.nav-toggle-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 1em;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.nav-toggle-label span,
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+  display: block;
+  background: var(--dark);
+  height: 2px;
+  width: 2em;
+  border-radius: 2px;
+  position: relative;
+}
+
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+  content: '';
+  position: absolute;
+}
+
+.nav-toggle-label span::before {
+  bottom: 7px;
+}
+
+.nav-toggle-label span::after {
+  top: 7px;
+}
+
+nav {
+  position: absolute;
+  text-align: right;
+  top: 100%;
+  left: 0;
+  background: linear-gradient(50deg, var(--dark) 45%, var(--darkgrey) 75%);
+  width: 100%;
+  transform: scale(1,0);
+  transform-origin: top;
+  transition: transform 400ms ease-in-out;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ***** */
+nav li {
+  margin-bottom: 1em;
+  margin-right: 1em;
+}
+
+nav a {
+  color: #fff;;
+  text-decoration: none;
+  font-size: 1.2rem;
+  /* text-transform: uppercase; */
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+}
+
+nav a:hover {
+  color: var(--yellow);
+}
+
+.nav-toggle:checked ~ nav {
+  transform: scale(1,1);
+}
+
+.nav-toggle:checked ~ nav a {
+  opacity: 1;
+  transition: opacity 250ms ease-in-out 250ms;
+}
+
+@media screen and (min-width: 800px) {
+  .nav-toggle-label {
+    display: none;
+  }
+
+  header {
+    /* display: grid; */
+    grid-template-columns: 1fr auto minmax(600px, 3fr) 1fr;
+  }
+
+  .logo {
+    grid-column: 2 / 3;
+  }
+
+  nav {
+    /* all: unset; */
+    position: fixed;
+    text-align: left;
+    margin-top: 25px;
+    transition: none;
+    transform: scale(1,1);
+    background: none;
+    top: initial;
+    left: initial;
+    grid-column: 3 / 4;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    /* text-shadow:
+         2px 2px 0 #000,
+       -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+         1px 1px 0 #000; */
+    /* border: 2px;
+    border-color: var(--purple) */
+  }
+
+  nav ul {
+    display: flex;
+    /* justify-content: flex-start; */
+    margin-left: 3em;
+    margin-bottom: 0;
+  }
+
+  nav li {
+    transition: opacity ease-in-out 300ms;
+    /* margin-left: 1em; */
+    margin-bottom: 0;
+  }
+
+  nav a {
+    color: #fff;
+    font-size: 20px;
+    opacity: 1;
+    position: relative;
+  }
+
+  nav a::before {
+    content: '';
+    display: block;
+    height: 5px;
+    background: var(--yellow);
+    position: absolute;
+    bottom: -.5em;
+    /* top: -.5em; */
+    left: 0;
+    right: 0;
+    transform: scale(0,1);
+    transform-origin: left;
+    transition: transform ease-in-out 250ms;
+  }
+
+  nav a:hover::before {
+    transform: scale(1,1);
+
+  }
+
+  .logo a::before {
+    content: '';
+    display: block;
+    width: 235px;
+    height: 5px;
+    background: var(--hot_pink2);
+    position: absolute;
+    bottom: 1.5px;
+
+    margin-left: 20px;
+    /* top: -.5em; */
+    left: 0;
+    right: 0;
+    transform: scale(0,1);
+    transform-origin: left;
+    transition: transform ease-in-out 250ms;
+  }
+
+  .logo a:hover::before {
+    transform: scale(1,1);
+
+  }
+
+}
+
+#grid-container {
+  object-fit: cover;
+  min-height: 100%;
+}
+
+#main {
+  overflow: auto;
+  padding-bottom: 20px;
+
+}
+
+#main_footer {
+  text-align: center;
+  position: relative;
+  z-index: 999;
+  width: 100%;
+  margin-top: -20px;
+  /* margin: 0px; */
+  padding: 20px;
+  /* height: 40px; */
+  background: linear-gradient(130deg, var(--yellow) 40%, var(--hot_pink2) 70%);
+  clear: both;
+  bottom:0;
+  }
+
+.copyright {
+  float: left;
+  font-size: .9em;
+  margin: 0;
+  }
+
+.links {
+  float: right;
+  }
+
+.links li {
+  color: var(--purple)
+  margin-left: 1em;
+  padding-top: .2em;
+  font-size: 20px;
+}
+
+.links li:hover  {
+  color: var(--hot_pink);
+}
+
+.sign_in {
+  color: var(--hot_pink2);
+}
