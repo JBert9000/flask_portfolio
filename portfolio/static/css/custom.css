@@ -281,10 +281,24 @@ figcaption:hover {
 
  /* About Page Small */
 
- 
-
  .about-img {
    max-width: 40%;
    margin-right: 20px;
    margin-bottom: 16px;
  }
+
+ /* Contact Page */
+
+ .contact-links a {
+   color: var(--yellow);
+   font-size: 20px;
+ }
+
+ .contact-links a:hover {
+   color: var(--hot_pink);
+   text-decoration: none;
+ }
+
+ /* BootStrap Elements */
+
+ 
