@@ -1,12 +1,12 @@
 from flask import (abort, flash, Markup, redirect, render_template,
                    request, Response, session, url_for)
-from portfolio import app
+from portfolio import app, db, bcrypt
 from datetime import datetime
 import sys
 import logging
 from portfolio.send_email2 import send_email
 from sqlalchemy.sql import func
-from portfolio.models import User, Post, Data
+from portfolio.models import User, Post
 from portfolio.forms import RegistrationForm, LoginForm
 
 
@@ -34,8 +34,13 @@ def home():
 def register():
     form=RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}', 'success')
-        return redirect(url_for('blog'))
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data,
+        password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Welcome {form.username.data}, your account has been created. You can now login.', 'success')
+        return redirect(url_for('login'))
 
     return render_template("register.html", title="Register", form=form)
 
@@ -71,23 +76,23 @@ def about():
 #         self.email_=email_
 #         self.score_=score_
 
-@app.route('/tetris-score', methods=["GET","POST"])
-def tetrisScore():
-    if request.method=='POST':
-        email=request.form["email_name"]
-        # score=request.form["tetris_score"]
-        score=request.get_json()
-
-        print("********************************" + str(score))
-
-        data=Data(email,score)
-        db.session.add(data)
-        db.session.commit()
-
-        send_email(email,score)
-
-        return render_template("tetris-score.html")
-    # return render_template('tetris-score.html',text="Your score has been updated.")
+# @app.route('/tetris-score', methods=["GET","POST"])
+# def tetrisScore():
+#     if request.method=='POST':
+#         email=request.form["email_name"]
+#         # score=request.form["tetris_score"]
+#         score=request.get_json()
+#
+#         print("********************************" + str(score))
+#
+#         data=Data(email,score)
+#         db.session.add(data)
+#         db.session.commit()
+#
+#         send_email(email,score)
+#
+#         return render_template("tetris-score.html")
+#     # return render_template('tetris-score.html',text="Your score has been updated.")
 
 @app.route('/plot/')
 def plot():
