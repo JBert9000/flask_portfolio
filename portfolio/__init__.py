@@ -1,13 +1,14 @@
 from flask import Flask
 import os
 
-from datetime import datetime
+# from datetime import datetime
 import sys
 import logging
 from flask_sqlalchemy import SQLAlchemy
-from portfolio.send_email2 import send_email
+# from portfolio.send_email2 import send_email
 from sqlalchemy.sql import func
 # from portfolio.forms import RegistrationForm, LoginForm #**this line seems to give me problems. Will check it later
+from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 
 # from portfolio.routes import app
@@ -33,6 +34,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db=SQLAlchemy(app)
 
 bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'warning'
 
 from portfolio import routes
 
