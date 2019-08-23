@@ -150,7 +150,7 @@ function playerMove(dir) {
 }
 
 function playerReset() {
-  const pieces = 'I'; // 'ILOTSZ'
+  const pieces = 'ILOTSZ' // 'I';
   player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
   player.pos.y = 0
   player.pos.x = (arena[0].length / 2 | 0) -
