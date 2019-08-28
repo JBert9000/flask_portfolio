@@ -1,5 +1,6 @@
 import os
 import secrets
+from PIL import Image
 from flask import (abort, flash, Markup, redirect, render_template,
                    request, Response, session, url_for)
 from portfolio import app, db, bcrypt
@@ -9,24 +10,8 @@ import logging
 from portfolio.send_email2 import send_email
 from sqlalchemy.sql import func
 from portfolio.models import User, Post
-from portfolio.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from portfolio.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from flask_login import login_user, current_user, logout_user, login_required
-
-
-posts=[
-    {
-        'author': 'Jan Bertlik',
-        'title': 'Blog Post 1',
-        'content': 'First post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post contentFirst post content',
-        'date_posted': 'August 1st 2019'
-    },
-    {
-        'author': 'Agata Pabich',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'August 1st 2019'
-    }
-]
 
 @app.route('/')
 def home():
@@ -67,14 +52,17 @@ def login():
 @app.route("/logout/")
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('blog'))
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(app.root_path,'static/profile_pictures',picture_fn)
-    form_picture.save(picture_path)
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
 
     return picture_fn
 
@@ -100,7 +88,55 @@ def account():
 
 @app.route("/blog/")
 def blog():
+    posts=Post.query.all()
     return render_template("blog.html",posts=posts, title="Blog")
+
+@app.route("/post/new",methods=['GET','POST'])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post=Post(title=form.title.data, content=form.content.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash(f'Successfully posted!', 'success')
+        return redirect(url_for('blog'))
+    return render_template("create_post.html",form=form, title="New Post",
+                            legend='New Post')
+
+@app.route("/post/<int:post_id>")
+def post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('post.html', title=post.title, post=post)
+
+@app.route("/post/<int:post_id>/update", methods=['GET','POST'])
+@login_required
+def update_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        abort(403)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        db.session.commit()
+        flash(f'Successfully updated your post!', 'success')
+        return redirect(url_for('post', post_id = post.id))
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
+    return render_template('create_post.html', title='Update Post',
+                            form=form, legend='Update Post')
+
+@app.route("/post/<int:post_id>/delete", methods=["POST"])
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        abort(403)
+    db.session.delete(post)
+    db.session.commit()
+    flash(f'Successfully deleted your post!', 'success')
+    return redirect(url_for('blog'))
 
 @app.route('/about/')
 def about():

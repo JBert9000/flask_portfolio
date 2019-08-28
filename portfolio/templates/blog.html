@@ -14,18 +14,21 @@
       <li class="list-group-item list-group-item-light">Calendars</li>
       <li class="list-group-item list-group-item-light">etc</li>
     </ul>
-  </p>
+    {% if current_user.is_authenticated %}
+      <br><br><h3>Welcome {{ current_user.username }}, Click <a class="new_post" href="{{ url_for('new_post')}}">Here</a> To Create A New Post.</h3><br>
+    {% endif %}
 </div>
 
 <div class="posts">
 {% for post in posts %}
   <article class="media content-section">
+    <img src="{{ url_for('static', filename='profile_pictures/'+post.author.image_file) }}" class="rounded-circle article-img" alt="">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="#">{{ post.author }}</a>
-      <small class="text-muted">{{ post.date_posted }}</small>
+      <a class="mr-2" href="{{ url_for('account') }}">{{ post.author.username }}</a>
+      <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
     </div>
-    <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+    <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
     <p class="article-content">{{ post.content }}</p>
   </div>
   </article>

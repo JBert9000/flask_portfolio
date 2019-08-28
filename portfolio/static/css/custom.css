@@ -265,7 +265,21 @@ figcaption:hover {
    font-size: 20px;
  }
 
- @media screen and (min-width: 52em) {
+ .new_post {
+   color: var(--yellow2);
+
+ }
+
+ .new_post:hover {
+   color: var(--forest_green);
+   text-decoration: none;
+ }
+
+ .modal-content {
+   background-color: var(--dark)
+ }
+
+ @media screen and (min-width: 82em) {
 
    .grid-container {
      /* grid-template-columns: repeat(auto-fit, minmax(15em, 1fr)); */
