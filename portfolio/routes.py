@@ -17,6 +17,12 @@ from flask_login import login_user, current_user, logout_user, login_required
 def home():
     return render_template("home.html", title="Home")
 
+@app.route("/blog/")
+def blog():
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page = page, per_page=5)
+    return render_template("blog.html",posts=posts, title="Blog")
+
 
 @app.route("/register/",methods=['GET','POST'])
 def register():
@@ -86,11 +92,6 @@ def account():
     return render_template('account.html', title="Profile", image_file=image_file, form=form)
 
 
-@app.route("/blog/")
-def blog():
-    posts=Post.query.all()
-    return render_template("blog.html",posts=posts, title="Blog")
-
 @app.route("/post/new",methods=['GET','POST'])
 @login_required
 def new_post():
@@ -137,6 +138,23 @@ def delete_post(post_id):
     db.session.commit()
     flash(f'Successfully deleted your post!', 'success')
     return redirect(url_for('blog'))
+
+@app.route("/user/<string:username>")
+def user_posts(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    # posts=Post.user_id.query.filter_by(author=user)\
+    #     .order_by(Post.date_posted.desc())\
+    #     .paginate(page = page, per_page=5)
+    #
+    # Below is the same code, except it is divided up with parentheses instead of slashes.
+    #
+    posts = (Post.query.filter_by(author=user)
+                  .order_by(Post.date_posted.desc())
+                  .paginate(page=page, per_page=5)
+            )
+    return render_template("user_post.html",
+    posts=posts,user=user,title="Account Posts")
 
 @app.route('/about/')
 def about():

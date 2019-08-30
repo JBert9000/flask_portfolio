@@ -80,6 +80,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .site-header .navbar-nav .nav-link {
   color: var(--hot_pink);
+  /* border-style: solid;
+  border-width: 2px;
+  border-color: var(--yellow); */
 }
 
 .site-header .navbar-nav .nav-link:hover {
@@ -279,6 +282,19 @@ figcaption:hover {
    background-color: var(--dark)
  }
 
+.dropdown {
+  width: 20%;
+  right: -890px;
+}
+
+.dropdown-menu {
+  background-color: var(--yellow)
+}
+
+.go_to_page {
+  width: 20%;
+}
+
  @media screen and (min-width: 82em) {
 
    .grid-container {
@@ -370,5 +386,11 @@ figcaption:hover {
    color: var(--hot_pink);
    text-decoration: none;
  }
+
+ /* @media screen and (minmax: 32em) {
+   .navbar-toggler {
+    display: none;
+   }
+ } */
 
  /* BootStrap Elements */

@@ -5,37 +5,78 @@
 
 <link rel="stylesheet" href="/static/css/custom.css">
 
+
+
 <div class="content-section">
-  <h3>Quick Links</h3>
+  <div class="dropdown">
+   <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">Quick Links
+   <span class="caret"></span></button>
+   <ul class="dropdown-menu">
+     <li class="list-group-item list-group-item-dark">Latest Posts</li>
+     <li class="list-group-item list-group-item-dark">Announcements</li>
+     <li class="list-group-item list-group-item-dark">Calendars</li>
+     <li class="list-group-item list-group-item-dark">etc</li>
+   </ul>
+  </div>
+
+  {% if current_user.is_authenticated %}
+    <h3>Welcome {{ current_user.username }}, Click <a class="new_post" href="{{ url_for('new_post')}}">Here</a> To Create A New Post.</h3>
+  {% endif %}
+
+
+  <h5 class="go_to_page">On Page:</h5>
+  {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% if page_num: %}
+      {% if posts.page ==  page_num %}
+        <a class="btn btn-warning mb-1 mt-1" href="{{ url_for('blog', page=page_num) }}">{{ page_num }}</a>
+      {% else %}
+        <a class="btn btn-outline-warning mb-1 mt-1" href="{{ url_for('blog', page=page_num) }}">{{ page_num }}</a>
+      {% endif %}
+    {% else: %}
+      ...
+    {% endif %}
+  {% endfor %}
+
+  <!-- <h3>Quick Links</h3>
   <p class='text-muted'>Navigate through the blog
     <ul class="list-group">
       <li class="list-group-item list-group-item-light">Latest Posts</li>
       <li class="list-group-item list-group-item-light">Announcements</li>
       <li class="list-group-item list-group-item-light">Calendars</li>
       <li class="list-group-item list-group-item-light">etc</li>
-    </ul>
-    {% if current_user.is_authenticated %}
-      <br><br><h3>Welcome {{ current_user.username }}, Click <a class="new_post" href="{{ url_for('new_post')}}">Here</a> To Create A New Post.</h3><br>
-    {% endif %}
+    </ul> -->
+
 </div>
 
 <div class="posts">
-{% for post in posts %}
+{% for post in posts.items %}
   <article class="media content-section">
     <img src="{{ url_for('static', filename='profile_pictures/'+post.author.image_file) }}" class="rounded-circle article-img" alt="">
   <div class="media-body">
     <div class="article-metadata">
-      <a class="mr-2" href="{{ url_for('account') }}">{{ post.author.username }}</a>
+      <a class="mr-2" href="{{ url_for('user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
       <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
     </div>
     <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
     <p class="article-content">{{ post.content }}</p>
   </div>
   </article>
-
 {% endfor %}
 </div>
 
-
+<div class="content-section">
+  <h5 class="go_to_page">On Page:</h5>
+  {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% if page_num: %}
+      {% if posts.page ==  page_num %}
+        <a class="btn btn-warning mb-1 mt-1" href="{{ url_for('blog', page=page_num) }}">{{ page_num }}</a>
+      {% else %}
+        <a class="btn btn-outline-warning mb-1 mt-1" href="{{ url_for('blog', page=page_num) }}">{{ page_num }}</a>
+      {% endif %}
+    {% else: %}
+      ...
+    {% endif %}
+  {% endfor %}
+</div>
 
 {%endblock%}
