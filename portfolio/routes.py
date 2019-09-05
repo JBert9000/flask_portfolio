@@ -3,50 +3,56 @@ import secrets
 from PIL import Image
 from flask import (abort, flash, Markup, redirect, render_template,
                    request, Response, session, url_for)
-from portfolio import app, db, bcrypt
+from portfolio import app, db, bcrypt, mail
 from datetime import datetime
 import sys
 import logging
 from portfolio.send_email2 import send_email
 from sqlalchemy.sql import func
 from portfolio.models import User, Post
-from portfolio.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+from portfolio.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
+                             PostForm, RequestResetForm, ResetPasswordForm)
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_mail import Message
+
 
 @app.route('/')
 def home():
     return render_template("home.html", title="Home")
 
+
 @app.route("/blog/")
 def blog():
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page = page, per_page=5)
-    return render_template("blog.html",posts=posts, title="Blog")
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+    return render_template("blog.html", posts=posts, title="Blog")
 
 
-@app.route("/register/",methods=['GET','POST'])
+@app.route("/register/", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('blog'))
-    form=RegistrationForm()
+    form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data,
-        password=hashed_password)
+                    password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash(f'Welcome {form.username.data}, your account has been created. You can now login.', 'success')
+        flash(
+            f'Welcome {form.username.data}, your account has been created. You can now login.', 'success')
         return redirect(url_for('login'))
 
     return render_template("register.html", title="Register", form=form)
 
-@app.route("/login/",methods=['GET','POST'])
+
+@app.route("/login/", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('blog'))
-    form=LoginForm()
+    form = LoginForm()
     if form.validate_on_submit():
-        user=User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
@@ -55,16 +61,18 @@ def login():
             flash(f'Login Failed. Please check email and password.', 'danger')
     return render_template("login.html", title="Login", form=form)
 
+
 @app.route("/logout/")
 def logout():
     logout_user()
     return redirect(url_for('blog'))
 
+
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path,'static/profile_pictures',picture_fn)
+    picture_path = os.path.join(app.root_path, 'static/profile_pictures', picture_fn)
     output_size = (125, 125)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
@@ -72,10 +80,11 @@ def save_picture(form_picture):
 
     return picture_fn
 
-@app.route("/account",methods=["GET","POST"])
+
+@app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
-    form=UpdateAccountForm()
+    form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
@@ -92,25 +101,27 @@ def account():
     return render_template('account.html', title="Profile", image_file=image_file, form=form)
 
 
-@app.route("/post/new",methods=['GET','POST'])
+@app.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post=Post(title=form.title.data, content=form.content.data, author=current_user)
+        post = Post(title=form.title.data, content=form.content.data, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash(f'Successfully posted!', 'success')
         return redirect(url_for('blog'))
-    return render_template("create_post.html",form=form, title="New Post",
-                            legend='New Post')
+    return render_template("create_post.html", form=form, title="New Post",
+                           legend='New Post')
+
 
 @app.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', title=post.title, post=post)
 
-@app.route("/post/<int:post_id>/update", methods=['GET','POST'])
+
+@app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
 @login_required
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
@@ -122,12 +133,13 @@ def update_post(post_id):
         post.content = form.content.data
         db.session.commit()
         flash(f'Successfully updated your post!', 'success')
-        return redirect(url_for('post', post_id = post.id))
+        return redirect(url_for('post', post_id=post.id))
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
     return render_template('create_post.html', title='Update Post',
-                            form=form, legend='Update Post')
+                           form=form, legend='Update Post')
+
 
 @app.route("/post/<int:post_id>/delete", methods=["POST"])
 def delete_post(post_id):
@@ -139,22 +151,61 @@ def delete_post(post_id):
     flash(f'Successfully deleted your post!', 'success')
     return redirect(url_for('blog'))
 
+
 @app.route("/user/<string:username>")
 def user_posts(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    # posts=Post.user_id.query.filter_by(author=user)\
-    #     .order_by(Post.date_posted.desc())\
-    #     .paginate(page = page, per_page=5)
-    #
-    # Below is the same code, except it is divided up with parentheses instead of slashes.
-    #
     posts = (Post.query.filter_by(author=user)
-                  .order_by(Post.date_posted.desc())
-                  .paginate(page=page, per_page=5)
-            )
+             .order_by(Post.date_posted.desc())
+             .paginate(page=page, per_page=5)
+             )
     return render_template("user_post.html",
-    posts=posts,user=user,title="Account Posts")
+                           posts=posts, user=user, title="Account Posts")
+
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request', sender='testemail.python2@yandex.com', recipients=[user.email])
+
+    msg.body = f'''To reset your password, click on the following link:
+{url_for('reset_token',token=token,_external=True)}
+If you did not make this request, ignore this email.
+'''
+    mail.send(msg)
+
+
+@app.route("/resest_password", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect("blog")
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('Email sent. Check your inbox for further instructions.', 'info')
+        return redirect(url_for('login'))
+    return render_template("reset_request.html", form=form, title="Reset Password")
+
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect("blog")
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('The session has expired. Please resubmit your email if you forgot your password', 'danger')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash(
+            f'Your password has been changed, you may login.', 'success')
+        return redirect(url_for('login'))
+    return render_template("reset_password.html", form=form, title="Reset Password")
+
 
 @app.route('/about/')
 def about():
@@ -202,84 +253,78 @@ def plot():
 
     six_months = date.today() + relativedelta(months=-6)
 
-    start=six_months
-    end=datetime.datetime.now()
+    start = six_months
+    end = datetime.datetime.now()
 
-    stock_names=["AMD","MSFT"]
+    stock_names = ["AMD", "MSFT"]
 
-    # def tickers(stock_names):
-    #     for i in stock_names:
-    #         return i
+    df = data.DataReader(name=stock_names[0], data_source="yahoo", start=start, end=end)
 
-
-    df=data.DataReader(name=stock_names[0],data_source="yahoo",start=start,end=end)
-
-    def increase_decrease(c,o):
+    def increase_decrease(c, o):
         if c > o:
-            value="Increase"
+            value = "Increase"
         elif c < o:
-            value="Decrease"
+            value = "Decrease"
         else:
-            value="Equal"
+            value = "Equal"
 
         return value
 
-    df["Status"]=[increase_decrease(c,o) for c,o in zip(df.Close,df.Open)]
+    df["Status"] = [increase_decrease(c, o) for c, o in zip(df.Close, df.Open)]
 
-    df["Middle"]=(df.Open+df.Close)/2
-    df["Height"]=abs(df.Close-df.Open)
+    df["Middle"] = (df.Open+df.Close)/2
+    df["Height"] = abs(df.Close-df.Open)
 
-    p=figure(x_axis_type='datetime',width=1000,height=300,sizing_mode='scale_width') # can repalce responsive=True with: sizing_mode='scale_width'
-    p.title.text=stock_names[0]
-    p.grid.grid_line_alpha=0.4
+    # can repalce responsive=True with: sizing_mode='scale_width'
+    p = figure(x_axis_type='datetime', width=1000, height=300, sizing_mode='scale_width')
+    p.title.text = stock_names[0]
+    p.grid.grid_line_alpha = 0.4
 
-    hours_12=12*60*60*1000
+    hours_12 = 12*60*60*1000
 
-    #.segment method takes 4 manditory arguments;high of both x & y, and low of both x & y
-    p.segment(df.index,df.High,df.index,df.Low,color="black")
+    # .segment method takes 4 manditory arguments;high of both x & y, and low of both x & y
+    p.segment(df.index, df.High, df.index, df.Low, color="black")
 
-    #.rect is the rectangle method. Arguments are: rect(x axis, y axis, width, height)
-    p.rect(df.index[df.Status=="Increase"],df.Middle[df.Status=="Increase"],
-           hours_12,df.Height[df.Status=="Increase"],fill_color="#00FA9A",line_color="black")
+    # .rect is the rectangle method. Arguments are: rect(x axis, y axis, width, height)
+    p.rect(df.index[df.Status == "Increase"], df.Middle[df.Status == "Increase"],
+           hours_12, df.Height[df.Status == "Increase"], fill_color="#00FA9A", line_color="black")
 
-    p.rect(df.index[df.Status=="Decrease"],df.Middle[df.Status=="Decrease"],
-           hours_12,df.Height[df.Status=="Decrease"],fill_color="#FF1493",line_color="black")
+    p.rect(df.index[df.Status == "Decrease"], df.Middle[df.Status == "Decrease"],
+           hours_12, df.Height[df.Status == "Decrease"], fill_color="#FF1493", line_color="black")
 
-    script1,div1=components(p)
-    script2,div2=components(p)
-    cdn_js=CDN.js_files[0]
-    cdn_css=CDN.css_files[0]
+    script1, div1 = components(p)
+    script2, div2 = components(p)
+    cdn_js = CDN.js_files[0]
+    cdn_css = CDN.css_files[0]
 
 ##############
 
-    df2=data.DataReader(name=stock_names[1],data_source="yahoo",start=start,end=end)
+    df2 = data.DataReader(name=stock_names[1], data_source="yahoo", start=start, end=end)
 
-    df2["Status"]=[increase_decrease(c,o) for c,o in zip(df2.Close,df2.Open)]
+    df2["Status"] = [increase_decrease(c, o) for c, o in zip(df2.Close, df2.Open)]
 
-    df2["Middle"]=(df2.Open+df2.Close)/2
-    df2["Height"]=abs(df2.Close-df2.Open)
+    df2["Middle"] = (df2.Open+df2.Close)/2
+    df2["Height"] = abs(df2.Close-df2.Open)
 
-    p2=figure(x_axis_type='datetime',width=1000,height=300,sizing_mode='scale_width') # can repalce responsive=True with: sizing_mode='scale_width'
-    p2.title.text=stock_names[1]
-    p2.grid.grid_line_alpha=0.4
+    # can repalce responsive=True with: sizing_mode='scale_width'
+    p2 = figure(x_axis_type='datetime', width=1000, height=300, sizing_mode='scale_width')
+    p2.title.text = stock_names[1]
+    p2.grid.grid_line_alpha = 0.4
 
-    p2.segment(df2.index,df2.High,df2.index,df2.Low,color="black")
+    p2.segment(df2.index, df2.High, df2.index, df2.Low, color="black")
 
-    p2.rect(df2.index[df2.Status=="Increase"],df2.Middle[df2.Status=="Increase"],
-           hours_12,df2.Height[df2.Status=="Increase"],fill_color="#00FA9A",line_color="black")
+    p2.rect(df2.index[df2.Status == "Increase"], df2.Middle[df2.Status == "Increase"],
+            hours_12, df2.Height[df2.Status == "Increase"], fill_color="#00FA9A", line_color="black")
 
-    p2.rect(df2.index[df2.Status=="Decrease"],df2.Middle[df2.Status=="Decrease"],
-           hours_12,df2.Height[df2.Status=="Decrease"],fill_color="#FF1493",line_color="black")
+    p2.rect(df2.index[df2.Status == "Decrease"], df2.Middle[df2.Status == "Decrease"],
+            hours_12, df2.Height[df2.Status == "Decrease"], fill_color="#FF1493", line_color="black")
 
-    script1,div1=components(p)
-    script2,div2=components(p2)
-    cdn_js=CDN.js_files[0]
-    cdn_css=CDN.css_files[0]
+    script1, div1 = components(p)
+    script2, div2 = components(p2)
+    cdn_js = CDN.js_files[0]
+    cdn_css = CDN.css_files[0]
 
-    return render_template("plot.html",script1=script1,div1=div1,script2=script2,div2=div2,cdn_js=cdn_js,cdn_css=cdn_css, title="Stocks")
-
-
-
+    return render_template("plot.html", script1=script1, div1=div1, script2=script2, div2=div2, cdn_js=cdn_js, cdn_css=cdn_css, title="Stocks")
 
 
 # db=SQLAlchemy(app)
@@ -327,9 +372,11 @@ def downloads():
         # as_attachment=True)
     return render_template("downloads.html", title="Downloads")
 
+
 @app.route("/contact")
 def contact():
     return render_template("contact.html", title="Contact")
+
 
 @app.route("/projects")
 def projects():

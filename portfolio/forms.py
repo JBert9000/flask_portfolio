@@ -5,16 +5,17 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from portfolio.models import User
 
+
 class RegistrationForm(FlaskForm):
-    username=StringField('Username',
-        validators=[DataRequired(), Length(min=2,max=20)])
-    email=StringField('Email',
-        validators=[DataRequired(),Email()])
-    password=PasswordField('Password',
-        validators=[DataRequired(),Length(min=6,max=20)])
-    confirm_password=PasswordField('Confirm Password',
-        validators=[DataRequired(),Length(min=6,max=20),EqualTo('password')])
-    submit=SubmitField('Sign Up')
+    username = StringField('Username',
+                           validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    password = PasswordField('Password',
+                             validators=[DataRequired(), Length(min=6, max=20)])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), Length(min=6, max=20), EqualTo('password')])
+    submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
@@ -28,21 +29,21 @@ class RegistrationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    email=StringField('Email',
-        validators=[DataRequired()])
-    password=PasswordField('Password',
-        validators=[DataRequired()])
-    remember=BooleanField('Remember Me')
-    submit=SubmitField('Login')
+    email = StringField('Email',
+                        validators=[DataRequired()])
+    password = PasswordField('Password',
+                             validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
 
 
 class UpdateAccountForm(FlaskForm):
-    username=StringField('Username',
-        validators=[DataRequired(), Length(min=2,max=20)])
-    email=StringField('Email',
-        validators=[DataRequired(),Email()])
-    picture=FileField('Update Profile Picture',
-        validators=[FileAllowed(['jpg','jpeg','png'])])
+    username = StringField('Username',
+                           validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()])
+    picture = FileField('Update Profile Picture',
+                        validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
 
     def validate_username(self, username):
         if username.data != current_user.username:
@@ -56,11 +57,29 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('Email already in use. Please select another one.')
 
-    submit=SubmitField('Update')
+    submit = SubmitField('Update')
 
 
 class PostForm(FlaskForm):
-    title = StringField('Title',validators=[DataRequired(), Length(min=2,max=20)])
-    content = TextAreaField('Content',validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired(), Length(min=2, max=20)])
+    content = TextAreaField('Content', validators=[DataRequired()])
 
-    submit=SubmitField('Post')
+    submit = SubmitField('Post')
+
+
+class RequestResetForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:
+            raise ValidationError('There is no account with this email. Please use a valid email.')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('New Password',
+                             validators=[DataRequired(), Length(min=6, max=20)])
+    confirm_password = PasswordField('Confirm New Password',
+                                     validators=[DataRequired(), Length(min=6, max=20), EqualTo('password')])
+    submit = SubmitField('Reset Password')

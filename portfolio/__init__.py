@@ -5,25 +5,41 @@ import os
 import sys
 import logging
 from flask_sqlalchemy import SQLAlchemy
-# from portfolio.send_email2 import send_email
+
 from sqlalchemy.sql import func
 # from portfolio.forms import RegistrationForm, LoginForm #**this line seems to give me problems. Will check it later
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+from flask_mail import Mail
 
-# from portfolio.routes import app
+
+app = Flask(__name__)
+# app.config['SECRET_KEY'] = os.environ.get('PORTFOLIO_SECRET_KEY')
+app.config['SECRET_KEY'] = 'secret key'
+
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'warning'
+
+app.config['MAIL_SERVER'] = 'smtp.yandex.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = True
+# app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = os.environ.get('YANDEX_EMAIL_USER')
+app.config['MAIL_PASSWORD'] = os.environ.get('YANDEX_EMAIL_PASS')
 
 
-app=Flask(__name__)
+mail = Mail(app)
 
-SECRET_KEY=os.urandom(32)
+# SECRET_KEY=os.urandom(32)
 
-app.config['SECRET_KEY']='613cbb85c192d44ce3c5e5b66ef35110'
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 
-app.config['SQLALCHEMY_DATABASE_URI']='postgresql://zeta_g:postgres123@localhost/blog_posts'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://zeta_g:postgres123@localhost/blog_posts'
 
 # app.config['SQLALCHEMY_DATABASE_URI']='postgresql://zeta_g:postgres123@localhost/tetris_scores'
 
@@ -31,13 +47,6 @@ app.config['SQLALCHEMY_DATABASE_URI']='postgresql://zeta_g:postgres123@localhost
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db=SQLAlchemy(app)
-
-bcrypt = Bcrypt(app)
-login_manager = LoginManager(app)
-login_manager.login_view = 'login'
-login_manager.login_message_category = 'warning'
-
-from portfolio import routes
 
 # $env:FLASK_APP = "portfolio"
+from portfolio import routes
