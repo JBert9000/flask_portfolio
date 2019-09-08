@@ -381,7 +381,7 @@ figcaption:hover {
 
  .contact-links a {
    color: var(--yellow);
-   font-size: 20px;
+   font-size: 40px;
  }
 
  .contact-links a:hover {
