@@ -336,6 +336,7 @@ figcaption:hover {
       .home {
         width: 95%;
         max-width: 1200px;
+        height: 650px;
         margin: 0 auto;
         display: grid;
         /* grid-auto-flow: column; */
@@ -361,6 +362,7 @@ figcaption:hover {
     max-width: 40%;
     margin-right: 20px;
     margin-bottom: 16px;
+    float: left;
   }
 
  .where_to_div {

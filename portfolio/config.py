@@ -13,6 +13,6 @@ class Config:
     MAIL_PASSWORD = os.environ.get('YANDEX_EMAIL_PASS')
 
     # SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI_LOCAL')
-    SQLALCHEMY_DATABASE_URI = "postgresql://zeta_g:postgres123@localhost/blog_posts"
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI_PORTFOlIO')
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False

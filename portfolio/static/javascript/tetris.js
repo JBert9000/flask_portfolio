@@ -250,9 +250,17 @@ document.addEventListener('keydown', event => {
   } else if (event.keyCode === 39) {
     playerMove(+1);
     // player.pos.x++;
-  } else if (event.keyCode === 40) {
+  }	else if (event.keyCode === 83) {
     playerDrop();
-  } else if (event.keyCode === 81) {
+  } else if (event.keyCode === 65) {
+    playerMove(-1);
+    // player.pos.x--;
+  } else if (event.keyCode === 68) {
+    playerMove(+1);
+    // player.pos.x++;
+  }	else if (event.keyCode === 40) {
+    playerDrop();
+  }	else if (event.keyCode === 81) {
     playerRotate(-1)
   } else if (event.keyCode === 87) {
     playerRotate(+1)
