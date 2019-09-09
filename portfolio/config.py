@@ -3,7 +3,7 @@ import os
 
 class Config:
     # SECRET_KEY = os.environ.get('PORTFOLIO_SECRET_KEY')
-    SECRET_KEY = 'secret'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
 
     MAIL_SERVER = 'smtp.yandex.com'
     MAIL_PORT = 465
