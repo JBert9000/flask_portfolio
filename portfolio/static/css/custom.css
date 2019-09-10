@@ -371,7 +371,7 @@ figcaption:hover {
    width: 75%;
  }
 
-#where_to {
+.where_to {
   float: left;
   padding: 10px;
 }
