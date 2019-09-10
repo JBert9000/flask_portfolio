@@ -1,5 +1,5 @@
 import os
-from boto.s3.connection import S3Connection
+from boto3.s3.connection import S3Connection
 
 
 class Config:
