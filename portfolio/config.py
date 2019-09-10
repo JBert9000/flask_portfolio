@@ -1,4 +1,5 @@
 import os
+from boto.s3.connection import S3Connection
 
 
 class Config:
@@ -15,3 +16,5 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI_PORTFOlIO')
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    s3 = S3Connection(os.environ['DATABASE_URL'])
