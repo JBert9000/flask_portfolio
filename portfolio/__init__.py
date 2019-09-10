@@ -1,11 +1,7 @@
 from flask import Flask
-
-# from datetime import datetime
 import sys
 import logging
 from flask_sqlalchemy import SQLAlchemy
-
-# from portfolio.forms import RegistrationForm, LoginForm #**this line seems to give me problems. Will check it later
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
@@ -20,10 +16,6 @@ login_manager.login_message_category = 'warning'
 
 
 mail = Mail()
-
-# SECRET_KEY=os.urandom(32)
-
-
 # $env:FLASK_APP = "portfolio"
 
 
