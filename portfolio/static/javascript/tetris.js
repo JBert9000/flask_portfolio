@@ -266,6 +266,8 @@ document.addEventListener('keydown', event => {
     playerRotate(+1)
   } else if (event.keyCode === 32) {
     playerRotate(+1)
+  } else if (event.keyCode === 13) {
+    playerRotate(+1)
   }
 });
 

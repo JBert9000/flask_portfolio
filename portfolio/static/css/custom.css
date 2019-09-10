@@ -169,6 +169,7 @@ a.article-title:hover {
   border-radius: 3px;
   /* margin-bottom: 450px; */
   grid-column: span 2;
+
 }
 
 .welcome-about {
@@ -311,6 +312,7 @@ figcaption:hover {
      grid-row: span 3;
      align-self: top;
      margin-bottom: 450px;
+     /* width: 100%; */
    }
 
    .page {
@@ -368,6 +370,15 @@ figcaption:hover {
  .where_to_div {
    width: 75%;
  }
+
+#where_to {
+  float: left;
+  padding: 10px;
+}
+.where_to_p {
+  padding: 5px;
+}
+
 
  /* About Page Small */
 
