@@ -1,5 +1,5 @@
 import os
-from subprocess import Popen, PIPE
+# from subprocess import Popen, PIPE
 # from boto3.s3.connection import S3Connection
 
 
@@ -22,16 +22,16 @@ class Config:
 
     # #################
 
-    SECRET_KEY = MAIL_USERNAME = MAIL_PASSWORD = SQLALCHEMY_DATABASE_URI = None
-    stdout, stderr = Popen(['heroku', 'config'], stdout=PIPE, stderr=PIPE, encoding='utf-8').communicate()
-    for line in stdout.split('\n'):
-        split = line.split(':')
-        if len(split) == 2:
-            if split[0] == 'SECRET_KEY':
-                SECRET_KEY = split[1].strip()
-            elif split[0] == 'YANDEX_EMAIL_USER':
-                MAIL_USERNAME = split[1].strip()
-            elif split[0] == 'YANDEX_EMAIL_PASS':
-                MAIL_PASSWORD = split[1].strip()
-            elif split[0] == 'SQLALCHEMY_DATABASE_URI':
-                SQLALCHEMY_DATABASE_URI_PORTFOlIO = split[1].strip()
+    # SECRET_KEY = MAIL_USERNAME = MAIL_PASSWORD = SQLALCHEMY_DATABASE_URI = None
+    # stdout, stderr = Popen(['heroku', 'config'], stdout=PIPE, stderr=PIPE, encoding='utf-8').communicate()
+    # for line in stdout.split('\n'):
+    #     split = line.split(':')
+    #     if len(split) == 2:
+    #         if split[0] == 'SECRET_KEY':
+    #             SECRET_KEY = split[1].strip()
+    #         elif split[0] == 'YANDEX_EMAIL_USER':
+    #             MAIL_USERNAME = split[1].strip()
+    #         elif split[0] == 'YANDEX_EMAIL_PASS':
+    #             MAIL_PASSWORD = split[1].strip()
+    #         elif split[0] == 'SQLALCHEMY_DATABASE_URI':
+    #             SQLALCHEMY_DATABASE_URI_PORTFOlIO = split[1].strip()
