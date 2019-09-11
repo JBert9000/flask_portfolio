@@ -23,7 +23,7 @@ class Config:
     # #################
 
     SECRET_KEY = MAIL_USERNAME = MAIL_PASSWORD = SQLALCHEMY_DATABASE_URI = None
-    stdout, stderr = Popen(['heroku', 'config'], stdout=PIPE, stderr=PIPE).communicate()
+    stdout, stderr = Popen(['heroku', 'config'], stdout=PIPE, stderr=PIPE, encoding='utf-8').communicate()
     for line in stdout.split('\n'):
         split = line.split(':')
         if len(split) == 2:
