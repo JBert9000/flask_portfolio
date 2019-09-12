@@ -24,10 +24,6 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    SQLALCHEMY_DATABASE_URI = os.environ["SQLALCHEMY_DATABASE_URI_PORTFOlIO"]
-
-    # SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
-
     with app.app_context():
         db.init_app(app)
         # db.create_all()
