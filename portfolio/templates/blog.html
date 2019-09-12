@@ -9,10 +9,9 @@
    <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">Quick Links
    <span class="caret"></span></button>
    <ul class="dropdown-menu">
-     <li class="list-group-item list-group-item-dark">Latest Posts</li>
-     <li class="list-group-item list-group-item-dark">Announcements</li>
-     <li class="list-group-item list-group-item-dark">Calendars</li>
-     <li class="list-group-item list-group-item-dark">etc</li>
+     <li class="list-group-item list-group-item-dark"><a href="{{ url_for('main.blog', page=1) }}">Latest Posts</a></li>
+     <!-- <li class="list-group-item list-group-item-dark"><a href="#"></a>Announcements</li> -->
+     <li class="list-group-item list-group-item-dark"><a href="{{ url_for('main.about') }}">About this Site</a></li>
    </ul>
   </div>
 

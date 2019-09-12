@@ -6,6 +6,7 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
 from portfolio.config import Config
+import os
 
 
 db = SQLAlchemy()
@@ -23,8 +24,14 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(Config)
 
+    SQLALCHEMY_DATABASE_URI = os.environ["SQLALCHEMY_DATABASE_URI_PORTFOlIO"]
+
+    # SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+
     with app.app_context():
         db.init_app(app)
+        # db.create_all()
+
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
