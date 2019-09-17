@@ -1,4 +1,4 @@
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, send_file
 from portfolio.models import Post
 
 main = Blueprint('main', __name__)
@@ -57,6 +57,13 @@ def downloads():
         # return send_file(file.filename,attachment_filename=file.filename,
         # as_attachment=True)
     return render_template("downloads.html", title="Downloads")
+
+
+@main.route("/return_file")
+def return_file():
+        # return send_file(file.filename,attachment_filename=file.filename,
+        # as_attachment=True)
+    return send_file('/Users/Honzor/Desktop/PROGRAMMING/Python/projects/python_portfolio/mysite/demo/portfolio/static/pictures/Jan Bertlik - CV.pdf', attachment_filename='Jan Bertlik - CV.pdf')
 
 
 @main.route("/contact")
