@@ -1,5 +1,6 @@
-from flask import render_template, request, Blueprint, send_file
+from flask import render_template, request, Blueprint, send_from_directory
 from portfolio.models import Post
+from portfolio.config import Config
 
 main = Blueprint('main', __name__)
 
@@ -59,11 +60,13 @@ def downloads():
     return render_template("downloads.html", title="Downloads")
 
 
-@main.route("/return_file")
-def return_file():
-        # return send_file(file.filename,attachment_filename=file.filename,
-        # as_attachment=True)
-    return send_file('/Users/Honzor/Desktop/PROGRAMMING/Python/projects/python_portfolio/mysite/demo/portfolio/static/pictures/Jan Bertlik - CV.pdf', attachment_filename='Jan Bertlik - CV.pdf')
+@main.route("/return_cv/<path:cv>")
+def return_cv(cv):
+    filename = f"{cv}.pdf"
+    try:
+        return send_from_directory(Config.MY_CV, filename=filename, as_attachment=True)
+    except FileNotFoundError:
+        return redirect(url_for('error_404', 404))
 
 
 @main.route("/contact")
