@@ -3,7 +3,7 @@ from portfolio.models import Post
 from portfolio.config import Config
 
 main = Blueprint('main', __name__)
-
+pdf_folder = 'static/client/pdf'
 
 @main.route('/')
 @main.route('/home')
@@ -55,8 +55,6 @@ def about():
 
 @main.route("/downloads")
 def downloads():
-        # return send_file(file.filename,attachment_filename=file.filename,
-        # as_attachment=True)
     return render_template("downloads.html", title="Downloads")
 
 
@@ -64,9 +62,9 @@ def downloads():
 def return_cv(cv):
     filename = f"{cv}.pdf"
     try:
-        return send_from_directory(Config.MY_CV, filename=filename, as_attachment=True)
+        return send_from_directory(pdf_folder, filename=filename, as_attachment=True)
     except FileNotFoundError:
-        return redirect(url_for('error_404', 404))
+        return redirect(url_for('error_500', 500))
 
 
 @main.route("/contact")
