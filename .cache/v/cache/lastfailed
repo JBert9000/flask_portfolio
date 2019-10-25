@@ -1,4 +1,5 @@
 {
+  "": true,
   "portfolio/tests/user/user_test.py": true,
   "portfolio/tests/user_test.py": true,
   "portfolio/user_test.py": true
